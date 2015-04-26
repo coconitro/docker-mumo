@@ -2,19 +2,21 @@
 
 if [ ! -f /data/mumo.ini ]
 then
-  sed -i 's/mumo.log/\/data\/mumo.log/' /mumo/mumo.ini
-  sed -i 's/modules\//\/data\/modules\//' /mumo/mumo.ini
-  sed -i 's/modules-enabled\//\/data\/modules-enabled\//' /mumo/mumo.ini
-
   cp /mumo/mumo.ini /data
-  chmod a+rw /data/mumo.ini
 
+  sed -i 's/mumo.log/\/data\/mumo.log/' /data/mumo.ini
+  sed -i 's/modules\//\/data\/modules\//' /data/mumo.ini
+  sed -i 's/modules-enabled\//\/data\/modules-enabled\//' /data/mumo.ini
+
+  chmod a+rw /data/mumo.ini
+  cp -r /mumo/modules-available /data
   mkdir -p /data/modules-enabled
-  cp -r /mumo/modules /data
-  ln -s /mumo/modules-available /data
 
   echo Created mumo default config data. Exiting.
   exit 1
 fi
 
-/mumo/mumo.py -ini /data/mumo.ini
+cp -rv /data/modules-enabled /mumo
+cp -rv /data/mumo.ini /mumo
+./mumo.py
+
